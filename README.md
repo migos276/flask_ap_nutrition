@@ -79,8 +79,8 @@ pip
 
 1. **Cloner le projet**
 ```bash
-git clone https://github.com/votre-username/allergie-detection-api.git
-cd allergie-detection-api
+git clone https://github.com/migos276/flask_ap_nutrition.git
+cd flask_ap_nutrition
 ```
 
 2. **Créer un environnement virtuel**
@@ -122,58 +122,55 @@ fenetre_temporelle_max = 48  # Heures maximum après repas
 seuil_alerte = 30           # Pourcentage pour alerte ÉLEVÉ
 ```
 
-## 🚀 Utilisation
+## 🚀 Utilisation REQUETES POSTMAN 
 
 ### Démarrage rapide
 
 1. **Créer un utilisateur**
-```bash
-curl -X POST http://localhost:5000/api/utilisateurs \
-  -H "Content-Type: application/json" \
-  -d '{"nom": "Jean Dupont", "email": "jean@example.com"}'
-```
+   POST http://localhost:5000/api/utilisateurs 
+  Body 
+  raw
+    {"nom": "Jean Dupont",
+     "email": "jean@example.com"
+     }
 
 2. **Ajouter des aliments à la base**
-```bash
-curl -X POST http://localhost:5000/api/aliments \
-  -H "Content-Type: application/json" \
-  -d '{
+  
+   POST http://localhost:5000/api/aliments
+  '{
     "nom": "Fromage de chèvre",
     "ingredients": ["lait de chèvre", "ferments"],
     "allergenes_courants": ["lactose", "caséine"],
     "calories_pour_100g": 364,
     "categorie": "Produits laitiers"
   }'
-```
+  Certains options dans ce POST sont optionnel car un utilisateur peut ne pas connaitre les allergenes courant dans une nourriture ou bien la cotegorie de la nourriture 
 
-3. **Enregistrer un repas**
-```bash
-curl -X POST http://localhost:5000/api/repas \
-  -H "Content-Type: application/json" \
-  -d '{
+1. **Enregistrer un repas**
+
+ POST http://localhost:5000/api/repas
+  {
     "utilisateur_id": 1,
     "aliments": [
       {"nom": "Fromage de chèvre", "quantite": 50}
     ],
     "description": "Salade de chèvre au déjeuner"
   }'
-```
 
-4. **Signaler un symptôme**
-```bash
-curl -X POST http://localhost:5000/api/symptomes \
-  -H "Content-Type: application/json" \
-  -d '{
+1. **Signaler un symptôme**
+ POST http://localhost:5000/api/symptomes 
+ Body 
+ raw
+  {
     "utilisateur_id": 1,
     "type_symptome": "Maux de ventre",
     "severite": 6,
     "description": "Douleurs abdominales 3h après le repas"
-  }'
-```
+  }
 
-5. **Obtenir l'analyse d'allergies**
-```bash
-curl http://localhost:5000/api/analyse/1
+1. **Obtenir l'analyse d'allergies**
+
+ http://localhost:5000/api/analyse/1
 ```
 
 ## 📡 Endpoints API
@@ -303,18 +300,14 @@ score_risque = (nombre_symptomes_après_consommation / nombre_total_consommation
 - **Métadonnées** : Extraction des dimensions, taille, type MIME
 
 ### Upload d'image
-
-```bash
-curl -X POST http://localhost:5000/api/images \
-  -H "Content-Type: application/json" \
-  -d '{
+POST http://localhost:5000/api/images
+  {
     "nom_fichier": "reaction_allergique.jpg",
     "donnees_base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABg...",
     "type_mime": "image/jpeg",
     "utilisateur_id": 1,
     "symptome_id": 5
-  }'
-```
+  }
 
 ### Accès aux images
 
@@ -389,9 +382,218 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 Pour toute question ou problème :
 - Créer une issue GitHub
-- Email : support@allergie-detection.com
-- Documentation : [Wiki du projet](https://github.com/votre-username/allergie-detection-api/wiki)
+- Email : tchemoumiguel@gmail.com
+
+# Requêtes Postman - Gestion de Buffet
+
+## 1. Créer un nouveau buffet
+
+**Méthode :** `POST`  
+**URL :** `http://localhost:5000/api/buffets`  
+**Headers :**
+```
+Content-Type: application/json
+```
+
+**Body (raw JSON) :**
+```json
+{
+  "utilisateur_id": 1,
+  "nom_evenement": "Anniversaire de Marie",
+  "date_evenement": "2025-07-15T18:00:00",
+  "nombre_invites": 25,
+  "budget_total": 300.00,
+  "type_evenement": "anniversaire",
+  "notes": "Thème tropical, éviter les fruits de mer",
+  "statut": "planification"
+}
+```
 
 ---
 
-**⚠️ Avertissement médical** : Cette application est un outil d'aide au suivi, elle ne remplace pas un diagnostic médical professionnel. Consultez toujours un allergologue ou un médecin pour un diagnostic définitif.
+## 2. Obtenir tous les buffets d'un utilisateur
+
+**Méthode :** `GET`  
+**URL :** `http://localhost:5000/api/buffets/1`  
+**Headers :** Aucun header spécifique requis
+
+---
+
+## 3. Ajouter un plat au buffet
+
+**Méthode :** `POST`  
+**URL :** `http://localhost:5000/api/buffets/1/plats`  
+**Headers :**
+```
+Content-Type: application/json
+```
+
+**Body (raw JSON) :**
+```json
+{
+  "nom_plat": "Salade de quinoa aux légumes",
+  "categorie": "entree",
+  "quantite_par_personne": 150,
+  "cout_unitaire": 3.50,
+  "allergenes": ["gluten"],
+  "ingredients": [
+    {
+      "nom": "quinoa",
+      "quantite": 50
+    },
+    {
+      "nom": "tomates cerises",
+      "quantite": 30
+    },
+    {
+      "nom": "concombre",
+      "quantite": 40
+    }
+  ],
+  "instructions_preparation": "Cuire le quinoa, couper les légumes, mélanger avec vinaigrette",
+  "temps_preparation": 45,
+  "difficulte": 2,
+  "notes": "Peut être préparé la veille"
+}
+```
+
+**Exemple avec un plat principal :**
+```json
+{
+  "nom_plat": "Poulet aux herbes de Provence",
+  "categorie": "plat_principal",
+  "quantite_par_personne": 200,
+  "cout_unitaire": 8.00,
+  "allergenes": [],
+  "ingredients": [
+    {
+      "nom": "blanc de poulet",
+      "quantite": 180
+    },
+    {
+      "nom": "herbes de Provence",
+      "quantite": 5
+    },
+    {
+      "nom": "huile d'olive",
+      "quantite": 10
+    }
+  ],
+  "instructions_preparation": "Mariner le poulet 2h, cuire au four 180°C pendant 25 min",
+  "temps_preparation": 30,
+  "difficulte": 3,
+  "notes": "Servir chaud"
+}
+```
+
+---
+
+## 4. Obtenir les détails complets d'un buffet
+
+**Méthode :** `GET`  
+**URL :** `http://localhost:5000/api/buffets/1/details`  
+**Headers :** Aucun header spécifique requis
+
+---
+
+## 5. Calculer les quantités totales nécessaires
+
+**Méthode :** `GET`  
+**URL :** `http://localhost:5000/api/buffets/1/quantites`  
+**Headers :** Aucun header spécifique requis
+
+---
+
+## 6. Générer un planning de préparation
+
+**Méthode :** `GET`  
+**URL :** `http://localhost:5000/api/buffets/1/planning`  
+**Headers :** Aucun header spécifique requis
+
+---
+
+## Exemples de réponses attendues
+
+### Réponse création de buffet (201 Created)
+```json
+{
+  "id": 1,
+  "utilisateur_id": 1,
+  "nom_evenement": "Anniversaire de Marie",
+  "date_evenement": "2025-07-15T18:00:00",
+  "nombre_invites": 25,
+  "budget_total": 300.0,
+  "type_evenement": "anniversaire",
+  "statut": "planification",
+  "date_creation": "2025-06-05T14:30:00"
+}
+```
+
+### Réponse liste des buffets (200 OK)
+```json
+[
+  {
+    "id": 1,
+    "nom_evenement": "Anniversaire de Marie",
+    "date_evenement": "2025-07-15T18:00:00",
+    "nombre_invites": 25,
+    "budget_total": 300.0,
+    "type_evenement": "anniversaire",
+    "statut": "planification",
+    "nombre_plats": 3,
+    "date_creation": "2025-06-05T14:30:00"
+  }
+]
+```
+
+---
+
+## Cas d'erreur à tester
+
+### Création de buffet sans champs requis
+**Body :**
+```json
+{
+  "nom_evenement": "Test"
+}
+```
+**Réponse attendue (400 Bad Request) :**
+```json
+{
+  "erreur": "Champs requis: ['utilisateur_id', 'nom_evenement', 'date_evenement', 'nombre_invites']"
+}
+```
+
+### Ajout de plat avec catégorie invalide
+**Body :**
+```json
+{
+  "nom_plat": "Test",
+  "categorie": "categorie_inexistante"
+}
+```
+**Réponse attendue (400 Bad Request) :**
+```json
+{
+  "erreur": "categorie doit être un de: ['entree', 'plat_principal', 'dessert', 'boisson', 'accompagnement']"
+}
+```
+
+---
+
+## Notes importantes
+
+1. **Remplacez les IDs** dans les URLs par les IDs réels retournés par vos requêtes
+2. **Ajustez l'URL de base** selon votre configuration (localhost:5000 par défaut)
+3. **Les catégories valides** sont : `entree`, `plat_principal`, `dessert`, `boisson`, `accompagnement`
+4. **Format de date** : ISO 8601 (YYYY-MM-DDTHH:MM:SS)
+5. **Testez d'abord** la création d'un buffet avant d'ajouter des plats
+
+## Ordre de test recommandé
+
+1. Créer un buffet
+2. Ajouter plusieurs plats (différentes catégories)
+3. Obtenir les détails du buffet
+4. Calculer les quantités
+5. Générer le planning
+6. Lister les buffets de l'utilisateur
