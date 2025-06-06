@@ -127,9 +127,9 @@ seuil_alerte = 30           # Pourcentage pour alerte ÉLEVÉ
 ### Démarrage rapide
 
 1. **Créer un utilisateur**
-   POST http://localhost:5000/api/utilisateurs 
-  Body 
-  raw
+  -POST http://localhost:5000/api/utilisateurs 
+  -Body 
+  -raw
     {"nom": "Jean Dupont",
      "email": "jean@example.com"
      }
@@ -597,3 +597,19 @@ Content-Type: application/json
 4. Calculer les quantités
 5. Générer le planning
 6. Lister les buffets de l'utilisateur
+
+
+pour tous probleme de conversion de l'image en base64 utiliser cette fonction python pour convertir votre image en bas64 
+
+import base64
+
+def image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded = base64.b64encode(image_file.read()).decode('utf-8')
+        mime_type = "image/jpeg"  # ou png, gif, etc.
+        return f"data:{mime_type};base64,{encoded}"
+
+# Utilisation
+base64_string = image_to_base64("mon_image.jpg")
+print(base64_string)
+https://www.youtube.com/watch?v=Zzjn_Jz-A2E
